@@ -1,5 +1,7 @@
 import { render } from '@testing-library/react';
 import React, { Component } from 'react';
+import { ToastContainer, toast, Zoom, Bounce } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
 
 export default class CreateUser extends Component {
@@ -28,7 +30,8 @@ export default class CreateUser extends Component {
         }
 
         axios.post('http://localhost:5000/users/add', user)
-            .then(res => console.log(res.data));
+            .then(res => toast.success(res.data))
+            .catch(() => toast.error('Something wrong!'));
 
         this.setState({
             username: ''
@@ -38,6 +41,7 @@ export default class CreateUser extends Component {
     render() {
         return (
             <div>
+                <ToastContainer transition={Zoom} autoClose={5000}/>
                 <h3>Create new user</h3>
                 <form onSubmit={this.onSubmit}>
                     <div className="form-group">

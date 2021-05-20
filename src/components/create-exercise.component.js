@@ -1,5 +1,7 @@
 import { render } from '@testing-library/react';
 import React, { Component } from 'react';
+import { ToastContainer, toast, Zoom, Bounce } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -68,16 +70,22 @@ export default class CreateExercise extends Component {
             duration: this.state.duration,
             date: this.state.date
         }
+        
+        if(this.state.duration > 0){
+            axios.post('http://localhost:5000/exercises/add', exercise)
+            .then(res => toast.success(res.data))
+            .catch(() => toast.error('Something wrong!'));
+        }else{
+            toast.error('Duration must be positive number!')
+        }
 
-        axios.post('http://localhost:5000/exercises/add', exercise)
-            .then(res => console.log(res));
-
-        window.location = '/';
+        
     }
 
     render() {
         return (
             <div>
+                <ToastContainer transition={Zoom} autoClose={5000}/>
                 <h3>New Exercise Log</h3>
                 <form onSubmit={this.onSubmit}>
                     <div className="form-group">
